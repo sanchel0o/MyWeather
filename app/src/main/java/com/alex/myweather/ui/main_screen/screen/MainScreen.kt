@@ -1,5 +1,6 @@
 package com.alex.myweather.ui.main_screen.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,12 +27,17 @@ fun MainScreen() {
             .systemBarsPadding()
     ) {
         Column {
-            WeatherInfoCard()
+            WeatherInfoCard(
+                pressure = 90,
+                humidity = 25,
+                windSpeed = 5
+            )
 
             LazyRow(
                 modifier = Modifier
                     .padding(start = MEDIUM_PADDING.dp, end = MEDIUM_PADDING.dp)
                     .fillMaxWidth(),
+                //contentPadding = paddingValues,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 items(24) {

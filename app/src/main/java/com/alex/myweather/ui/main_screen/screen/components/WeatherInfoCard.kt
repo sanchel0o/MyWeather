@@ -16,22 +16,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.alex.myweather.R
 
 @Composable
-fun WeatherInfoCard() {
-
-    val rowVerticalAlignment: Alignment.Vertical = Alignment.CenterVertically
-
-    val rowValuesPadding: Modifier = Modifier.padding(start = SMALL_PADDING.dp)
-
-    val textStyle: TextStyle = MaterialTheme.typography.labelMedium
-    val fontColor: Color = MaterialTheme.colorScheme.primary
-
+fun WeatherInfoCard(
+    pressure: Int,
+    humidity: Int,
+    windSpeed: Int
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -55,56 +51,47 @@ fun WeatherInfoCard() {
                 ),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row(
-                verticalAlignment = rowVerticalAlignment
-            ) {
-                Icon(
-                    modifier = Modifier.size(WEATHER_INFO_ICON_SIZE.dp),
-                    painter = painterResource(id = R.drawable.ic_rainy),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
-                )
-                Text(
-                    modifier = rowValuesPadding,
-                    color = fontColor,
-                    style = textStyle,
-                    text = "2 " + stringResource(id = R.string.percent_symbol)
-                )
-            }
+            WeatherInfo(
+                value = pressure,
+                unit = stringResource(id = R.string.percent_symbol),
+                icon = painterResource(id = R.drawable.ic_pressure)
+            )
 
-            Row(
-                verticalAlignment = rowVerticalAlignment
-            ) {
-                Icon(
-                    modifier = Modifier.size(WEATHER_INFO_ICON_SIZE.dp),
-                    painter = painterResource(id = R.drawable.ic_pressure),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
-                )
-                Text(
-                    modifier = rowValuesPadding,
-                    color = fontColor,
-                    style = textStyle,
-                    text = "90 " + stringResource(id = R.string.percent_symbol)
-                )
-            }
+            WeatherInfo(
+                value = humidity,
+                unit = stringResource(id = R.string.percent_symbol),
+                icon = painterResource(id = R.drawable.ic_drop)
+            )
 
-            Row(
-                verticalAlignment = rowVerticalAlignment
-            ) {
-                Icon(
-                    modifier = Modifier.size(WEATHER_INFO_ICON_SIZE.dp) ,
-                    painter = painterResource(id = R.drawable.ic_wind),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
-                )
-                Text(
-                    modifier = rowValuesPadding,
-                    color = fontColor,
-                    style = textStyle,
-                    text = "12 " + stringResource(id = R.string.wind_speed)
-                )
-            }
+            WeatherInfo(
+                value = windSpeed,
+                unit = stringResource(id = R.string.wind_speed),
+                icon = painterResource(id = R.drawable.ic_wind)
+            )
         }
+    }
+}
+
+@Composable
+fun WeatherInfo(
+    value: Int,
+    unit: String,
+    icon: Painter
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            modifier = Modifier.size(WEATHER_INFO_LARGE_ICON_SIZE.dp),
+            painter = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary
+        )
+        Text(
+            modifier = Modifier.padding(start = SMALL_PADDING.dp),
+            color = MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.labelMedium,
+            text = value.toString() + unit
+        )
     }
 }

@@ -1,9 +1,6 @@
 package com.alex.myweather.ui.main_screen.screen.components
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
@@ -22,7 +19,7 @@ import com.alex.myweather.R
 fun HourlyWeatherCard() {
 
     Card(
-        modifier = Modifier.padding(end = 4.dp),
+        modifier = Modifier,
     ) {
         Column(
             modifier = Modifier.padding(MEDIUM_PADDING.dp),
@@ -31,7 +28,7 @@ fun HourlyWeatherCard() {
             Text(text = "12:00") //time
             Icon(
                 modifier = Modifier
-                    .size(WEATHER_INFO_ICON_SIZE.dp)
+                    .size(WEATHER_INFO_LARGE_ICON_SIZE.dp)
                     .padding(top = SMALL_PADDING.dp, bottom = SMALL_PADDING.dp),
                 painter = painterResource(id = R.drawable.ic_rainshower),
                 contentDescription = null,
