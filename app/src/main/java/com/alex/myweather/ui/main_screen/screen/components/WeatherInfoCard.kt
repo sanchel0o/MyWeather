@@ -31,11 +31,13 @@ fun WeatherInfoCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(MEDIUM_PADDING.dp)
+            .padding(
+                horizontal = MEDIUM_PADDING.dp,
+                vertical = SMALL_PADDING.dp)
             .shadow(
                 shape = RoundedCornerShape(MEDIUM_CORNER_RADIUS.dp),
                 elevation = 24.dp,
-                spotColor = Color.Blue,
+                spotColor = MaterialTheme.colorScheme.primary,
             ),
         shape = RoundedCornerShape(MEDIUM_CORNER_RADIUS.dp),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
@@ -44,10 +46,8 @@ fun WeatherInfoCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    start = LARGE_PADDING.dp,
-                    end = LARGE_PADDING.dp,
-                    top = SMALL_PADDING.dp,
-                    bottom = SMALL_PADDING.dp
+                    horizontal = LARGE_PADDING.dp,
+                    vertical = SMALL_PADDING.dp
                 ),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -82,7 +82,7 @@ fun WeatherInfo(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            modifier = Modifier.size(WEATHER_INFO_LARGE_ICON_SIZE.dp),
+            modifier = Modifier.size(WEATHER_INFO_MEDIUM_ICON_SIZE.dp),
             painter = icon,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.primary
