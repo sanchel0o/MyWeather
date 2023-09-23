@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    kotlin("plugin.serialization") version "1.9.10"
 }
 
 android {
@@ -19,6 +20,10 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
         }
     }
 
@@ -63,6 +68,17 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
+    // retrofit2
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    //implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // OkHttp3
+    implementation ("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.3")
+    implementation ("com.squareup.okhttp3:okhttp:5.0.0-alpha.3")
+
     // Dagger - Hilt
     implementation ("com.google.dagger:hilt-android:2.48")
     ksp ("com.google.dagger:hilt-compiler:2.48")
@@ -72,6 +88,16 @@ dependencies {
     // Core
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+
+    // Kotlin - serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+
+    // Room
+    val roomVersion = "2.5.2"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
 
     // Test
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.09.00"))
