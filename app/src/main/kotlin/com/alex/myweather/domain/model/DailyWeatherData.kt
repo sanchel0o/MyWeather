@@ -1,9 +1,9 @@
 package com.alex.myweather.domain.model
 
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 data class DailyWeatherData(
-    val day: LocalDateTime,
+    val day: LocalDate,
     val maxTemp: Int,
     val minTemp: Int,
     val humidity: Int,

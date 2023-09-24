@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class WeatherForecastDto(
+    val location: Location,
     val current: Current,
-    val forecast: Forecast,
-    val location: Location
+    val forecast: Forecast
 )

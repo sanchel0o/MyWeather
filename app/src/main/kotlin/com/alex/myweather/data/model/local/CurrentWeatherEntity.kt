@@ -13,5 +13,5 @@ data class CurrentWeatherEntity(
     val humidity: Int,
     @ColumnInfo(name = "wind_speed") val windSpeed: Int,
     @ColumnInfo(name = "weather_icon") val weatherIcon: String?,
-    @ColumnInfo(name = "") val hourly: String?
+    @ColumnInfo(name = "hourly_weather_data") val hourlyWeatherData: String?
 )

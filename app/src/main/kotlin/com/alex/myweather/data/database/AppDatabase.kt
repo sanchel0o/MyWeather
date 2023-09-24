@@ -1,6 +1,9 @@
 package com.alex.myweather.data.database
 
 import androidx.room.Database
+import androidx.room.RoomDatabase
+import com.alex.myweather.data.dao.CurrentWeatherDao
+import com.alex.myweather.data.dao.DailyForecastDao
 import com.alex.myweather.data.model.local.CurrentWeatherEntity
 import com.alex.myweather.data.model.local.DailyWeatherEntity
 
@@ -11,5 +14,9 @@ import com.alex.myweather.data.model.local.DailyWeatherEntity
         DailyWeatherEntity::class
     ]
 )
-abstract class AppDatabase {
+abstract class AppDatabase : RoomDatabase() {
+
+    abstract fun currentWeatherDao() : CurrentWeatherDao
+
+    abstract fun dailyWeatherDao() : DailyForecastDao
 }
