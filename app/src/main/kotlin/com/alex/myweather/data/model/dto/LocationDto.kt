@@ -1,9 +1,9 @@
-package com.alex.myweather.data.model.remote
+package com.alex.myweather.data.model.dto
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Location(
+data class LocationDto(
     val name: String,
     val country: String,
     val region: String,

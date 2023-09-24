@@ -1,9 +1,9 @@
-package com.alex.myweather.data.model.remote
+package com.alex.myweather.data.model.dto
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Astro(
+data class AstroDto(
     val is_moon_up: Int,
     val is_sun_up: Int,
     val moon_illumination: String,

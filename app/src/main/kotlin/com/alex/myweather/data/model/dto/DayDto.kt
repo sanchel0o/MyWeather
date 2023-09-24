@@ -1,15 +1,15 @@
-package com.alex.myweather.data.model.remote
+package com.alex.myweather.data.model.dto
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Day(
+data class DayDto(
     val avghumidity: Double,
     val avgtemp_c: Double,
     val avgtemp_f: Double,
     val avgvis_km: Double,
     val avgvis_miles: Double,
-    val condition: Condition,
+    val condition: ConditionDto,
     val daily_chance_of_rain: Double,
     val daily_chance_of_snow: Double,
     val daily_will_it_rain: Double,

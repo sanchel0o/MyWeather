@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,6 +41,7 @@ fun CurrentWeatherData(
     currentTemperature: Int?,
     date: LocalDate
 ) {
+
     Column(
         modifier = Modifier
             .padding(
@@ -68,6 +70,7 @@ fun CurrentWeatherIcon(
     AsyncImage(
         contentScale = ContentScale.FillWidth,
         modifier = Modifier
+            .sizeIn(maxWidth = 100.dp)
             .fillMaxWidth()
             .aspectRatio(1f),
         model = imageUrl,

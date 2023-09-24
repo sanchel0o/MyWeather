@@ -1,13 +1,13 @@
-package com.alex.myweather.data.model.remote
+package com.alex.myweather.data.model.dto
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Hour(
+data class HourDto(
     val chance_of_rain: Double,
     val chance_of_snow: Double,
     val cloud: Int,
-    val condition: Condition,
+    val condition: ConditionDto,
     val dewpoint_c: Double,
     val dewpoint_f: Double,
     val feelslike_c: Double,

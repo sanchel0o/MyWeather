@@ -1,11 +1,11 @@
-package com.alex.myweather.data.model.remote
+package com.alex.myweather.data.model.dto
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Current(
+data class CurrentDto(
     val cloud: Int,
-    val condition: Condition,
+    val condition: ConditionDto,
     val feelslike_c: Double,
     val feelslike_f: Double,
     val gust_kph: Double,

@@ -72,7 +72,7 @@ fun WeatherInfoCard(
         ) {
             WeatherInfo(
                 valueType = pressure,
-                unit = stringResource(id = R.string.percent_symbol),
+                unit = stringResource(id = R.string.pressure_unit),
                 icon = painterResource(id = R.drawable.ic_pressure)
             )
 

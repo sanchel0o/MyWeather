@@ -34,86 +34,86 @@ import java.time.LocalDate
 fun MainScreen(
     viewModel: MainScreenViewModel = hiltViewModel()
 ) {
-    val forecastState by viewModel.forecastDataState.collectAsStateWithLifecycle()
+    //val forecastState by viewModel.forecastDataState.collectAsStateWithLifecycle()
 
-    if (forecastState.isLoading) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            LinearProgressIndicator(
-                modifier = Modifier
-            )
-        }
-    } else {
-        Scaffold(
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding(),
-
-            topBar = {
-                MainScreenTopAppBar(
-                    onMenuButtonClick = {},
-                    onAddCityButtonClick = {}
-                )
-            }
-        ) { paddingValues ->
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.SpaceBetween
-                ) {
-                    CurrentWeatherData(
-                        imageUrl = forecastState.currentWeatherData?.imageUrl
-                            ?: "http://cdn.weatherapi.com/weather/64x64/day/116.png",
-                        currentTemperature = forecastState.currentWeatherData?.temperature,
-                        unit = stringResource(id = R.string.degree_symbol),
-                        date = LocalDate.now()
-                    )
-
-                    WeatherInfoCard(
-                        pressure = forecastState.currentWeatherData?.pressure,
-                        humidity = forecastState.currentWeatherData?.humidity,
-                        windSpeed = forecastState.currentWeatherData?.windSpeed
-                    )
-
-                    LazyRow(
-                        modifier = Modifier
-                            .padding(horizontal = MEDIUM_PADDING.dp)
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(space = 12.dp),
-
-                        ) {
-                        items(forecastState.hourlyWeatherData) { item ->
-                            HourlyWeatherCard(
-                                time = item.time,
-                                temperature = item.temperature,
-                                unit = stringResource(id = R.string.degree_symbol),
-                                imageUrl = item.imageUrl
-                            )
-                        }
-
-                    }
-
-                    DailyForecastCard {
-                        LazyColumn {
-                            items(forecastState.dailyWeatherData) { item ->
-                                SingleDayForecast(
-                                    date = item.day.toString(),
-                                    dayHumidity = item.humidity,
-                                    imageUrl = item.imageUrl,
-                                    maxDayTemperature = item.maxTemp,
-                                    minDayTemperature = item.minTemp,
-                                    degreeUnit = stringResource(id = R.string.degree_symbol)
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+//    if (forecastState.isLoading) {
+//        Box(modifier = Modifier.fillMaxSize()) {
+//            LinearProgressIndicator(
+//                modifier = Modifier
+//            )
+//        }
+//    } else {
+//        Scaffold(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .statusBarsPadding(),
+//
+//            topBar = {
+//                MainScreenTopAppBar(
+//                    onMenuButtonClick = {},
+//                    onAddCityButtonClick = {}
+//                )
+//            }
+//        ) { paddingValues ->
+//            Box(
+//                Modifier
+//                    .fillMaxSize()
+//                    .padding(paddingValues),
+//            ) {
+//                Column(
+//                    modifier = Modifier.fillMaxSize(),
+//                    verticalArrangement = Arrangement.Top
+//                ) {
+//                    CurrentWeatherData(
+//                        imageUrl = forecastState.currentWeatherData?.imageUrl
+//                            ?: "http://cdn.weatherapi.com/weather/64x64/day/116.png",
+//                        currentTemperature = forecastState.currentWeatherData?.temperature,
+//                        unit = stringResource(id = R.string.degree_symbol),
+//                        date = LocalDate.now()
+//                    )
+//
+//                    WeatherInfoCard(
+//                        pressure = forecastState.currentWeatherData?.pressure,
+//                        humidity = forecastState.currentWeatherData?.humidity,
+//                        windSpeed = forecastState.currentWeatherData?.windSpeed
+//                    )
+//
+//                    LazyRow(
+//                        modifier = Modifier
+//                            .padding(horizontal = MEDIUM_PADDING.dp)
+//                            .fillMaxWidth(),
+//                        horizontalArrangement = Arrangement.spacedBy(space = 12.dp),
+//
+//                        ) {
+//                        items(forecastState.hourlyWeatherData) { item ->
+//                            HourlyWeatherCard(
+//                                time = item.time,
+//                                temperature = item.temperature,
+//                                unit = stringResource(id = R.string.degree_symbol),
+//                                imageUrl = item.imageUrl
+//                            )
+//                        }
+//
+//                    }
+//
+//                    DailyForecastCard {
+//                        LazyColumn {
+//                            items(forecastState.dailyWeatherData) { item ->
+//                                SingleDayForecast(
+//                                    date = item.day.toString(),
+//                                    dayHumidity = item.humidity,
+//                                    imageUrl = item.imageUrl,
+//                                    maxDayTemperature = item.maxTemp,
+//                                    minDayTemperature = item.minTemp,
+//                                    degreeUnit = stringResource(id = R.string.degree_symbol)
+//                                )
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 
 }
 

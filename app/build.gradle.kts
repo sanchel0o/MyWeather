@@ -10,6 +10,10 @@ android {
     namespace = "com.alex.myweather"
     compileSdk = 34
 
+    buildFeatures{
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.alex.myweather"
         minSdk = 26
@@ -28,7 +32,16 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "API_KEY", "\"1b3d3a413a704c2082784210231207\"")
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
         release {
+            buildConfigField("String", "API_KEY", "\"1b3d3a413a704c2082784210231207\"")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

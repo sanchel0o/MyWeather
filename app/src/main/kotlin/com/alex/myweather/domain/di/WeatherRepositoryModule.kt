@@ -1,7 +1,7 @@
 package com.alex.myweather.domain.di
 
-import com.alex.myweather.data.repository.WeatherRepositoryImpl
-import com.alex.myweather.domain.repository.WeatherRepository
+import com.alex.myweather.data.repository.RemoteWeatherRepositoryImpl
+import com.alex.myweather.domain.repository.RemoteWeatherRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,6 +15,6 @@ abstract class WeatherRepositoryModule {
     @Binds
     @Singleton
     abstract fun bindWeatherRepository(
-        weatherRepositoryImpl: WeatherRepositoryImpl
-    ): WeatherRepository
+        weatherRepositoryImpl: RemoteWeatherRepositoryImpl
+    ): RemoteWeatherRepository
 }
