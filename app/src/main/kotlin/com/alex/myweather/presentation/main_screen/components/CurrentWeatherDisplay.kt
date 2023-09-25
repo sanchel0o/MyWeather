@@ -88,7 +88,7 @@ fun CurrentTemperature(
             if(currentTemperature != null) {
                 currentTemperature.toString() + unit
             } else {
-                "?"
+                ""
             }
         }
     }
@@ -104,5 +104,8 @@ fun CurrentTemperature(
 fun CurrentDate(
     date: LocalDate
 ) {
-    Text(text = date.toString())
+    Text(
+        color = MaterialTheme.colorScheme.secondary,
+        text = date.toString()
+    )
 }

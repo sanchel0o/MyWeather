@@ -39,7 +39,7 @@ fun HourDto.toDomain(): HourlyWeatherData = HourlyWeatherData(
 )
 
 fun Forecastday.toDomain(): DailyWeatherData = DailyWeatherData(
-    day = LocalDate.parse(this.date, dateFormatter).toString(),
+    day = LocalDate.parse(this.date, dateFormatter).dayOfWeek.toString(),
     maxTemp = this.day.maxtemp_c.roundToInt(),
     minTemp = this.day.mintemp_c.roundToInt(),
     humidity = this.day.avghumidity.roundToInt(),

@@ -8,51 +8,54 @@ import com.alex.myweather.domain.model.DailyWeatherData
 import com.alex.myweather.domain.model.HourlyWeatherData
 import java.util.UUID
 
-fun CurrentWeatherData.toEntity() : CurrentWeatherEntity = CurrentWeatherEntity(
-    id = UUID.fromString("0"),
+
+
+fun CurrentWeatherData.toEntity(): CurrentWeatherEntity = CurrentWeatherEntity(
+    id = UUID.randomUUID(),
     temperature = temperature,
     pressure = pressure,
     humidity = humidity,
     windSpeed = windSpeed,
     imageUrl = imageUrl,
-    condition = condition
+    condition = condition,
 )
 
-fun DailyWeatherData.toEntity() : DailyWeatherEntity = DailyWeatherEntity(
+fun CurrentWeatherEntity.toDomain(): CurrentWeatherData = CurrentWeatherData(
+    temperature = temperature,
+    pressure = pressure,
+    humidity = humidity,
+    windSpeed = windSpeed,
+    imageUrl = imageUrl,
+    condition = condition,
+)
+
+
+fun DailyWeatherData.toEntity(): DailyWeatherEntity = DailyWeatherEntity(
     id = UUID.randomUUID(),
-    date =  day,
+    date = day,
     maxTemperature = maxTemp,
     minTemperature = minTemp,
     humidity = humidity,
-    imageUrl = imageUrl
-)
-
-fun CurrentWeatherEntity.toDomain() : CurrentWeatherData = CurrentWeatherData(
-    temperature = temperature,
-    pressure = pressure,
-    humidity = humidity,
-    windSpeed = windSpeed,
     imageUrl = imageUrl,
-    condition = condition
 )
 
-fun DailyWeatherEntity.toDomain() : DailyWeatherData = DailyWeatherData(
+fun DailyWeatherEntity.toDomain(): DailyWeatherData = DailyWeatherData(
     day = date,
     maxTemp = maxTemperature,
     minTemp = minTemperature,
     humidity = humidity,
-    imageUrl = imageUrl
+    imageUrl = imageUrl,
 )
 
-fun HourlyWeatherData.toEntity() : HourlyWeatherEntity = HourlyWeatherEntity(
+fun HourlyWeatherData.toEntity(): HourlyWeatherEntity = HourlyWeatherEntity(
     id = UUID.randomUUID(),
     time = time,
     temperature = temperature,
-    imageUrl = imageUrl
+    imageUrl = imageUrl,
 )
 
-fun HourlyWeatherEntity.toDomain() : HourlyWeatherData = HourlyWeatherData(
+fun HourlyWeatherEntity.toDomain(): HourlyWeatherData = HourlyWeatherData(
     time = time,
     temperature = temperature,
-    imageUrl = imageUrl
+    imageUrl = imageUrl,
 )

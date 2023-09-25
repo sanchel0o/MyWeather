@@ -9,13 +9,13 @@ interface LocalWeatherRepository {
 
     suspend fun saveCurrentWeatherData(value: CurrentWeatherData)
 
-    suspend fun saveDailyWeatherData(value: DailyWeatherData)
+    suspend fun saveDailyWeatherData(values: DailyWeatherData)
 
-    suspend fun saveHourlyWeatherData(value: HourlyWeatherData)
+    suspend fun saveHourlyWeatherData(values: HourlyWeatherData)
 
     fun observeCurrentWeatherData(): Flow<CurrentWeatherData>
 
-    fun observeDailyWeatherData(): Flow<DailyWeatherData>
+    fun observeDailyWeatherData(): Flow<List<DailyWeatherData>>
 
-    fun observeHourlyWeatherData(): Flow<HourlyWeatherData>
+    fun observeHourlyWeatherData(): Flow<List<HourlyWeatherData>>
 }

@@ -1,50 +1,103 @@
 package com.alex.myweather.service
 
 import android.app.Notification
-import android.app.PendingIntent
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.os.IBinder
-import com.alex.myweather.MainActivity
+import android.util.Log
+import androidx.core.app.NotificationCompat
 import com.alex.myweather.R
 import com.alex.myweather.domain.repository.LocalWeatherRepository
 import com.alex.myweather.domain.repository.RemoteWeatherRepository
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class WeatherService @Inject constructor(
-    private val remoteRepository: RemoteWeatherRepository,
-    private val localWeatherRepository: LocalWeatherRepository,
-): Service() {
+class WeatherService @Inject constructor() : Service() {
 
-    companion object{
-        const val ID_SERVICE = 1
-    }
+    @Inject lateinit var remoteRepository: RemoteWeatherRepository
+    @Inject lateinit var localWeatherRepository: LocalWeatherRepository
 
-    override fun onBind(p0: Intent?): IBinder? {
-        return null
-    }
+    private val serviceJob = Job()
+    private val serviceScope = CoroutineScope(Dispatchers.IO + serviceJob)
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val pendingIntent: PendingIntent =
-            Intent(this, MainActivity::class.java).let { notificationIntent ->
-                PendingIntent.getActivity(
-                    this, 0, notificationIntent,
-                    PendingIntent.FLAG_IMMUTABLE
-                )
+    private fun loadWeatherData() {
+        serviceScope.launch {
+            val result = try {
+                remoteRepository.loadForecastData()
+            } catch (e: Exception) {
+                Log.d("SERVICE", "Exception message is: ${e.message}")
+                null
             }
 
-        val notification: Notification = Notification.Builder(this, DOWNLOAD_SERVICE)
-            .setContentTitle(getText(R.string.notification_title))
-            .setContentText(getText(R.string.notification_message))
-            .setSmallIcon(R.drawable.ic_drop)
-            .setContentIntent(pendingIntent)
-            //.setTicker(getText(R.string.ticker_text))
-            .build()
+            localWeatherRepository.apply {
+                result?.currentWeatherData?.let { saveCurrentWeatherData(it) }
 
-        startForeground(ID_SERVICE, notification)
+                result?.dailyWeatherData?.map { saveDailyWeatherData(it) }
 
-        return START_NOT_STICKY
+                result?.hourlyWeatherData?.map { saveHourlyWeatherData(it) }
+
+            }
+        }
+    }
+
+    private companion object {
+        const val WEATHER_CHANNEL = "WEATHER_CHANNEL"
+        const val NOTIFICATION_ID = 1
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+
+        createNotificationChannel()
+
+        val notificationBuilder = createNotificationBuilder()
+        startForeground(NOTIFICATION_ID, notificationBuilder.build())
+        loadWeatherData()
+    }
+
+    private fun createNotificationBuilder(): NotificationCompat.Builder =
+        NotificationCompat.Builder(this, WEATHER_CHANNEL)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle(getString(R.string.notification_title))
+            .setContentText(getString(R.string.notification_message))
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setCategory(Notification.CATEGORY_SERVICE)
+            .setSilent(true)
+            .setStyle(
+                NotificationCompat.InboxStyle()
+                    .addLine("Catching data")
+            )
+            .setOngoing(true)
+
+    //@RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel() {
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (notificationManager.getNotificationChannel(WEATHER_CHANNEL) != null) return
+
+        val channel = NotificationChannel(
+            WEATHER_CHANNEL,
+            getString(R.string.channel_name),
+            NotificationManager.IMPORTANCE_LOW
+        )
+
+        notificationManager.createNotificationChannel(channel)
+    }
+
+    override fun onBind(p0: Intent?): IBinder? = null
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = START_STICKY
+
+    override fun onDestroy() {
+        //serviceScope.cancel()
+        super.onDestroy()
     }
 }

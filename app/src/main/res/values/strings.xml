@@ -8,5 +8,7 @@
 
     <string name="notification_title">MyWeather</string>
     <string name="notification_message">Foreground Service is Started</string>
+    <string name="channel_name">Weather Notification Channel</string>
+    <string name="channel_description">Notification Channel</string>
 
 </resources>

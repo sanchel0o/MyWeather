@@ -71,12 +71,3 @@ val PersianOrange = Color(0xFFCE8964)
 val Mindaro = Color(0xFFEAF07C)
 val DodgerBlue = Color(0xFF2191FB)
 val OxfordBlue = Color(0xFF0A2239)
-
-val backgroundGradientLight = Brush.linearGradient(
-    colors = listOf(DodgerBlue, OxfordBlue),
-    start = Offset.Zero,
-    end = Offset.Infinite,
-    tileMode = TileMode.Clamp,
-)
-
-val backgroundGradientDark = Brush.linearGradient(listOf(Primary, Secondary, Tertiary))

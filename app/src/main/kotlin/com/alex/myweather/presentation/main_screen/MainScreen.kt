@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,87 +33,80 @@ import java.time.LocalDate
 fun MainScreen(
     viewModel: MainScreenViewModel = hiltViewModel()
 ) {
-    //val forecastState by viewModel.forecastDataState.collectAsStateWithLifecycle()
 
-//    if (forecastState.isLoading) {
-//        Box(modifier = Modifier.fillMaxSize()) {
-//            LinearProgressIndicator(
-//                modifier = Modifier
-//            )
-//        }
-//    } else {
-//        Scaffold(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .statusBarsPadding(),
-//
-//            topBar = {
-//                MainScreenTopAppBar(
-//                    onMenuButtonClick = {},
-//                    onAddCityButtonClick = {}
-//                )
-//            }
-//        ) { paddingValues ->
-//            Box(
-//                Modifier
-//                    .fillMaxSize()
-//                    .padding(paddingValues),
-//            ) {
-//                Column(
-//                    modifier = Modifier.fillMaxSize(),
-//                    verticalArrangement = Arrangement.Top
-//                ) {
-//                    CurrentWeatherData(
-//                        imageUrl = forecastState.currentWeatherData?.imageUrl
-//                            ?: "http://cdn.weatherapi.com/weather/64x64/day/116.png",
-//                        currentTemperature = forecastState.currentWeatherData?.temperature,
-//                        unit = stringResource(id = R.string.degree_symbol),
-//                        date = LocalDate.now()
-//                    )
-//
-//                    WeatherInfoCard(
-//                        pressure = forecastState.currentWeatherData?.pressure,
-//                        humidity = forecastState.currentWeatherData?.humidity,
-//                        windSpeed = forecastState.currentWeatherData?.windSpeed
-//                    )
-//
-//                    LazyRow(
-//                        modifier = Modifier
-//                            .padding(horizontal = MEDIUM_PADDING.dp)
-//                            .fillMaxWidth(),
-//                        horizontalArrangement = Arrangement.spacedBy(space = 12.dp),
-//
-//                        ) {
-//                        items(forecastState.hourlyWeatherData) { item ->
-//                            HourlyWeatherCard(
-//                                time = item.time,
-//                                temperature = item.temperature,
-//                                unit = stringResource(id = R.string.degree_symbol),
-//                                imageUrl = item.imageUrl
-//                            )
-//                        }
-//
-//                    }
-//
-//                    DailyForecastCard {
-//                        LazyColumn {
-//                            items(forecastState.dailyWeatherData) { item ->
-//                                SingleDayForecast(
-//                                    date = item.day.toString(),
-//                                    dayHumidity = item.humidity,
-//                                    imageUrl = item.imageUrl,
-//                                    maxDayTemperature = item.maxTemp,
-//                                    minDayTemperature = item.minTemp,
-//                                    degreeUnit = stringResource(id = R.string.degree_symbol)
-//                                )
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
+    val currentWeatherState by viewModel.currentWeatherDataFlow.collectAsStateWithLifecycle()
+    val dailyWeatherState by viewModel.dailyWeatherDataFlow.collectAsStateWithLifecycle()
+    val hourlyWeatherState by viewModel.hourlyWeatherDataFlow.collectAsStateWithLifecycle()
 
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding(),
+
+        topBar = {
+            MainScreenTopAppBar(
+                onMenuButtonClick = {},
+                onAddCityButtonClick = {}
+            )
+        }
+    ) { paddingValues ->
+        Box(
+            Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+        ) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Top
+            ) {
+                CurrentWeatherData(
+                    imageUrl = currentWeatherState?.imageUrl
+                        ?: "",
+                    currentTemperature = currentWeatherState?.temperature,
+                    unit = stringResource(id = R.string.degree_symbol),
+                    date = LocalDate.now()
+                )
+
+                WeatherInfoCard(
+                    pressure = currentWeatherState?.pressure,
+                    humidity = currentWeatherState?.humidity,
+                    windSpeed = currentWeatherState?.windSpeed
+                )
+
+                LazyRow(
+                    modifier = Modifier
+                        .padding(horizontal = MEDIUM_PADDING.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(space = 12.dp),
+
+                    ) {
+                    items(hourlyWeatherState ?: emptyList()) { item ->
+                        HourlyWeatherCard(
+                            time = item.time,
+                            temperature = item.temperature,
+                            unit = stringResource(id = R.string.degree_symbol),
+                            imageUrl = item.imageUrl
+                        )
+                    }
+                }
+
+                DailyForecastCard {
+                    LazyColumn {
+                        items(dailyWeatherState ?: emptyList()) { item ->
+                            SingleDayForecast(
+                                date = item.day,
+                                dayHumidity = item.humidity,
+                                imageUrl = item.imageUrl,
+                                maxDayTemperature = item.maxTemp,
+                                minDayTemperature = item.minTemp,
+                                degreeUnit = stringResource(id = R.string.degree_symbol)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Composable

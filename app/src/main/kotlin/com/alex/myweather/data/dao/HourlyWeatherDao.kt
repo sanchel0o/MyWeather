@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.Flow
 interface HourlyWeatherDao {
 
     @Query("SELECT * FROM hourly_weather")
-    fun observeHourlyWeatherData() : Flow<HourlyWeatherEntity>
+    fun observeHourlyWeatherData() : Flow<List<HourlyWeatherEntity>>
 
     @Upsert
-    suspend fun upsertHourlyWeatherData(value: HourlyWeatherEntity)
+    suspend fun upsertHourlyWeatherData(vararg values: HourlyWeatherEntity)
 }

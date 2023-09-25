@@ -2,6 +2,7 @@ package com.alex.myweather.presentation.main_screen.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -11,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -47,23 +49,18 @@ fun HourlyWeatherCard(
             style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.outline,
             text = time
-        ) //time
+        )
 
         AsyncImage(
             modifier = Modifier
                 .size(WEATHER_INFO_LARGE_ICON_SIZE.dp)
-                .padding(top = SMALL_PADDING.dp, bottom = SMALL_PADDING.dp),
+                .padding(vertical = SMALL_PADDING.dp)
+                .aspectRatio(1f),
+            contentScale = ContentScale.FillHeight,
             model = imageUrl,
             contentDescription = null
         )
 
-//        Icon(
-//            modifier = Modifier
-//                .size(WEATHER_INFO_LARGE_ICON_SIZE.dp)
-//                .padding(top = SMALL_PADDING.dp, bottom = SMALL_PADDING.dp),
-//            painter = icon,
-//            contentDescription = null
-//        )
         Text(
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.primary,

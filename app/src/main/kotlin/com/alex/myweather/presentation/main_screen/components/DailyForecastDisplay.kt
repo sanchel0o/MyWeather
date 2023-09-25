@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.alex.myweather.R
@@ -36,9 +37,16 @@ import java.time.format.DateTimeFormatter
 private fun Preview() = MyWeatherPreview {
     DailyForecastCard()
     {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         SingleDayForecast(
-            date = LocalDateTime.now().format(formatter),
+            date = LocalDateTime.now().dayOfWeek.toString(),
+            dayHumidity = 23,
+            imageUrl = "http://cdn.weatherapi.com/weather/64x64/day/116.png",
+            maxDayTemperature = 27,
+            minDayTemperature = 15,
+            degreeUnit = stringResource(id = R.string.degree_symbol)
+        )
+        SingleDayForecast(
+            date = "Wednesday",
             dayHumidity = 23,
             imageUrl = "http://cdn.weatherapi.com/weather/64x64/day/116.png",
             maxDayTemperature = 27,
@@ -87,15 +95,23 @@ fun SingleDayForecast(
                     horizontal = MEDIUM_PADDING.dp,
                     vertical = SMALL_PADDING.dp
                 ),
-            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                color = MaterialTheme.colorScheme.primary,
-                text = date.toString()
-            )
+            Row(
+                modifier = Modifier.weight(1f),
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Text(
+                    color = MaterialTheme.colorScheme.primary,
+                    text = date.lowercase().capitalize()
+                )
+            }
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.padding(end = MEDIUM_PADDING.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
                 Icon(
                     modifier = Modifier.size(WEATHER_INFO_SMALL_ICON_SIZE.dp),
                     tint = MaterialTheme.colorScheme.primary,
@@ -110,15 +126,26 @@ fun SingleDayForecast(
                 )
             }
 
-            AsyncImage(
-                modifier = Modifier.size(WEATHER_INFO_MEDIUM_ICON_SIZE.dp),
-                model = imageUrl,
-                contentDescription = null
-            )
+            Row(
+                modifier = Modifier.padding(start = MEDIUM_PADDING.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
+            ) {
+                AsyncImage(
+                    modifier = Modifier.size(WEATHER_INFO_MEDIUM_ICON_SIZE.dp),
+                    model = imageUrl,
+                    contentDescription = null
+                )
+            }
 
-            Text(
-                text = "$maxDayTemperature$degreeUnit/ $minDayTemperature$degreeUnit"
-            )
+            Row(
+                modifier = Modifier.weight(1f),
+                horizontalArrangement = Arrangement.End
+            ) {
+                Text(
+                    text = "$maxDayTemperature$degreeUnit/ $minDayTemperature$degreeUnit"
+                )
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.alex.myweather.domain.model.CurrentWeatherData
 import com.alex.myweather.domain.model.DailyWeatherData
 import com.alex.myweather.domain.model.ForecastData
+import com.alex.myweather.domain.model.HourlyWeatherData
 import com.alex.myweather.domain.repository.LocalWeatherRepository
 import com.alex.myweather.domain.repository.RemoteWeatherRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,11 +31,19 @@ class MainScreenViewModel @Inject constructor(
             initialValue = null
         )
 
-    val dailyWeatherDataFlow : StateFlow<DailyWeatherData?> = repository
+    val dailyWeatherDataFlow : StateFlow<List<DailyWeatherData>?> = repository
         .observeDailyWeatherData()
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.Lazily,
+            started = SharingStarted.Eagerly,
+            initialValue = null
+        )
+
+    val hourlyWeatherDataFlow : StateFlow<List<HourlyWeatherData>?> = repository
+        .observeHourlyWeatherData()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
             initialValue = null
         )
 
