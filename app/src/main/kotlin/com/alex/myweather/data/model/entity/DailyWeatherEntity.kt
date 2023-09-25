@@ -6,8 +6,7 @@ import java.util.UUID
 
 @Entity(tableName = "daily_weather")
 data class DailyWeatherEntity(
-    @PrimaryKey val id: UUID,
-    val date: String,
+    @PrimaryKey val date: String,
     val maxTemperature: Int,
     val minTemperature: Int,
     val humidity: Int,

@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.capitalize
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.alex.myweather.R

@@ -1,7 +1,7 @@
 package com.alex.myweather.data.mapper
 
 import com.alex.myweather.data.model.dto.CurrentDto
-import com.alex.myweather.data.model.dto.Forecastday
+import com.alex.myweather.data.model.dto.ForecastdayDto
 import com.alex.myweather.data.model.dto.HourDto
 import com.alex.myweather.data.model.dto.WeatherForecastDto
 import com.alex.myweather.domain.model.CurrentWeatherData
@@ -38,7 +38,7 @@ fun HourDto.toDomain(): HourlyWeatherData = HourlyWeatherData(
     imageUrl = URL_PREFIX + this.condition.icon
 )
 
-fun Forecastday.toDomain(): DailyWeatherData = DailyWeatherData(
+fun ForecastdayDto.toDomain(): DailyWeatherData = DailyWeatherData(
     day = LocalDate.parse(this.date, dateFormatter).dayOfWeek.toString(),
     maxTemp = this.day.maxtemp_c.roundToInt(),
     minTemp = this.day.mintemp_c.roundToInt(),

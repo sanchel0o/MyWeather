@@ -100,9 +100,9 @@ fun WeatherInfo(
     val value by remember(valueType) {
         derivedStateOf { 
             if (valueType != null) {
-                valueType.toString() + unit
+                "$valueType $unit"
             } else {
-                "?"
+                ""
             }
         }
     }

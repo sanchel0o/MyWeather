@@ -60,8 +60,7 @@ fun MainScreen(
                 verticalArrangement = Arrangement.Top
             ) {
                 CurrentWeatherData(
-                    imageUrl = currentWeatherState?.imageUrl
-                        ?: "",
+                    imageUrl = currentWeatherState?.imageUrl ?: "",
                     currentTemperature = currentWeatherState?.temperature,
                     unit = stringResource(id = R.string.degree_symbol),
                     date = LocalDate.now()
@@ -80,7 +79,7 @@ fun MainScreen(
                     horizontalArrangement = Arrangement.spacedBy(space = 12.dp),
 
                     ) {
-                    items(hourlyWeatherState ?: emptyList()) { item ->
+                    items(hourlyWeatherState) { item ->
                         HourlyWeatherCard(
                             time = item.time,
                             temperature = item.temperature,
@@ -92,7 +91,7 @@ fun MainScreen(
 
                 DailyForecastCard {
                     LazyColumn {
-                        items(dailyWeatherState ?: emptyList()) { item ->
+                        items(dailyWeatherState) { item ->
                             SingleDayForecast(
                                 date = item.day,
                                 dayHumidity = item.humidity,

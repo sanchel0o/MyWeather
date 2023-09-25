@@ -8,54 +8,53 @@ import com.alex.myweather.domain.model.DailyWeatherData
 import com.alex.myweather.domain.model.HourlyWeatherData
 import java.util.UUID
 
+private val DEFAULT_UUID = UUID.nameUUIDFromBytes("0".toByteArray())
 
-
+//TODO - add this
 fun CurrentWeatherData.toEntity(): CurrentWeatherEntity = CurrentWeatherEntity(
-    id = UUID.randomUUID(),
-    temperature = temperature,
-    pressure = pressure,
-    humidity = humidity,
-    windSpeed = windSpeed,
-    imageUrl = imageUrl,
-    condition = condition,
+    id = DEFAULT_UUID,
+    temperature = this.temperature,
+    pressure = this.pressure,
+    humidity = this.humidity,
+    windSpeed = this.windSpeed,
+    imageUrl = this.imageUrl,
+    condition = this.condition,
 )
 
 fun CurrentWeatherEntity.toDomain(): CurrentWeatherData = CurrentWeatherData(
-    temperature = temperature,
-    pressure = pressure,
-    humidity = humidity,
-    windSpeed = windSpeed,
-    imageUrl = imageUrl,
-    condition = condition,
+    temperature = this.temperature,
+    pressure = this.pressure,
+    humidity = this.humidity,
+    windSpeed = this.windSpeed,
+    imageUrl = this.imageUrl,
+    condition = this.condition,
 )
 
 
 fun DailyWeatherData.toEntity(): DailyWeatherEntity = DailyWeatherEntity(
-    id = UUID.randomUUID(),
-    date = day,
-    maxTemperature = maxTemp,
-    minTemperature = minTemp,
-    humidity = humidity,
-    imageUrl = imageUrl,
+    date = this.day,
+    maxTemperature = this.maxTemp,
+    minTemperature = this.minTemp,
+    humidity = this.humidity,
+    imageUrl = this.imageUrl,
 )
 
 fun DailyWeatherEntity.toDomain(): DailyWeatherData = DailyWeatherData(
-    day = date,
-    maxTemp = maxTemperature,
-    minTemp = minTemperature,
-    humidity = humidity,
-    imageUrl = imageUrl,
+    day = this.date,
+    maxTemp = this.maxTemperature,
+    minTemp = this.minTemperature,
+    humidity = this.humidity,
+    imageUrl = this.imageUrl,
 )
 
 fun HourlyWeatherData.toEntity(): HourlyWeatherEntity = HourlyWeatherEntity(
-    id = UUID.randomUUID(),
-    time = time,
-    temperature = temperature,
-    imageUrl = imageUrl,
+    time = this.time,
+    temperature = this.temperature,
+    imageUrl = this.imageUrl,
 )
 
 fun HourlyWeatherEntity.toDomain(): HourlyWeatherData = HourlyWeatherData(
-    time = time,
-    temperature = temperature,
-    imageUrl = imageUrl,
+    time = this.time,
+    temperature = this.temperature,
+    imageUrl = this.imageUrl,
 )

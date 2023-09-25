@@ -22,7 +22,6 @@ class MainActivity : ComponentActivity() {
         startWeatherService()
 
         setContent {
-
             MyWeatherTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -38,5 +37,4 @@ class MainActivity : ComponentActivity() {
         val intent = Intent(this, WeatherService::class.java)
         startForegroundService(intent)
     }
-
 }

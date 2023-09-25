@@ -86,7 +86,7 @@ fun CurrentTemperature(
     val value by remember(currentTemperature, unit) {
         derivedStateOf {
             if(currentTemperature != null) {
-                currentTemperature.toString() + unit
+                "$currentTemperature $unit"
             } else {
                 ""
             }

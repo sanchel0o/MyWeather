@@ -16,9 +16,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private const val WEATHER_CHANNEL = "WEATHER_CHANNEL"
+private const val NOTIFICATION_ID = 1
 
 @AndroidEntryPoint
 class WeatherService @Inject constructor() : Service() {
@@ -31,27 +35,22 @@ class WeatherService @Inject constructor() : Service() {
 
     private fun loadWeatherData() {
         serviceScope.launch {
-            val result = try {
-                remoteRepository.loadForecastData()
-            } catch (e: Exception) {
-                Log.d("SERVICE", "Exception message is: ${e.message}")
-                null
-            }
+            while (true){
+                val result = try {
+                    remoteRepository.loadForecastData()
+                } catch (e: Exception) {
+                    Log.d("SERVICE", "Exception message is: ${e.message}")
+                    null
+                }
 
-            localWeatherRepository.apply {
-                result?.currentWeatherData?.let { saveCurrentWeatherData(it) }
-
-                result?.dailyWeatherData?.map { saveDailyWeatherData(it) }
-
-                result?.hourlyWeatherData?.map { saveHourlyWeatherData(it) }
-
+                localWeatherRepository.apply {
+                    result?.currentWeatherData?.let { saveCurrentWeatherData(it) }
+                    result?.dailyWeatherData?.map { saveDailyWeatherData(it) }
+                    result?.hourlyWeatherData?.map { saveHourlyWeatherData(it) }
+                }
+                delay(5000)
             }
         }
-    }
-
-    private companion object {
-        const val WEATHER_CHANNEL = "WEATHER_CHANNEL"
-        const val NOTIFICATION_ID = 1
     }
 
     override fun onCreate() {
@@ -78,7 +77,6 @@ class WeatherService @Inject constructor() : Service() {
             )
             .setOngoing(true)
 
-    //@RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel() {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (notificationManager.getNotificationChannel(WEATHER_CHANNEL) != null) return
@@ -97,7 +95,7 @@ class WeatherService @Inject constructor() : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = START_STICKY
 
     override fun onDestroy() {
-        //serviceScope.cancel()
+        serviceScope.cancel()
         super.onDestroy()
     }
 }

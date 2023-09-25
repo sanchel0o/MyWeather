@@ -11,6 +11,7 @@ import com.alex.myweather.domain.model.HourlyWeatherData
 import com.alex.myweather.domain.repository.LocalWeatherRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import java.util.UUID
 import javax.inject.Inject
 
@@ -34,6 +35,7 @@ class LocalWeatherRepositoryImpl @Inject constructor(
 
     override fun observeCurrentWeatherData(): Flow<CurrentWeatherData> = currentWeatherDao
         .observeCurrentWeatherData()
+        .mapNotNull { it.firstOrNull() }
         .map { it.toDomain() }
 
     override fun observeDailyWeatherData(): Flow<List<DailyWeatherData>> = dailyWeatherDao
@@ -42,5 +44,7 @@ class LocalWeatherRepositoryImpl @Inject constructor(
 
     override fun observeHourlyWeatherData(): Flow<List<HourlyWeatherData>> = hourlyWeatherDao
         .observeHourlyWeatherData()
-        .map { hourlyWeatherEntities -> hourlyWeatherEntities.map { it.toDomain() } }
+        .map { hourlyWeatherEntities ->
+            hourlyWeatherEntities.map { it.toDomain() }
+        }
 }

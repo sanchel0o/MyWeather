@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "c7773dffadc9cda987b49aee73b173eb",
+    "identityHash": "af0789d27ae293b9485160b1ba79d524",
     "entities": [
       {
         "tableName": "current_weather",
@@ -62,14 +62,8 @@
       },
       {
         "tableName": "daily_weather",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `date` TEXT NOT NULL, `maxTemperature` INTEGER NOT NULL, `minTemperature` INTEGER NOT NULL, `humidity` INTEGER NOT NULL, `imageUrl` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`date` TEXT NOT NULL, `maxTemperature` INTEGER NOT NULL, `minTemperature` INTEGER NOT NULL, `humidity` INTEGER NOT NULL, `imageUrl` TEXT NOT NULL, PRIMARY KEY(`date`))",
         "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "BLOB",
-            "notNull": true
-          },
           {
             "fieldPath": "date",
             "columnName": "date",
@@ -104,7 +98,7 @@
         "primaryKey": {
           "autoGenerate": false,
           "columnNames": [
-            "id"
+            "date"
           ]
         },
         "indices": [],
@@ -112,14 +106,8 @@
       },
       {
         "tableName": "hourly_weather",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` BLOB NOT NULL, `time` TEXT NOT NULL, `temperature` INTEGER NOT NULL, `imageUrl` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`time` TEXT NOT NULL, `temperature` INTEGER NOT NULL, `imageUrl` TEXT NOT NULL, PRIMARY KEY(`time`))",
         "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "BLOB",
-            "notNull": true
-          },
           {
             "fieldPath": "time",
             "columnName": "time",
@@ -142,7 +130,7 @@
         "primaryKey": {
           "autoGenerate": false,
           "columnNames": [
-            "id"
+            "time"
           ]
         },
         "indices": [],
@@ -152,7 +140,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c7773dffadc9cda987b49aee73b173eb')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'af0789d27ae293b9485160b1ba79d524')"
     ]
   }
 }

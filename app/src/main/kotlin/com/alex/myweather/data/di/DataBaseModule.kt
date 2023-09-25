@@ -19,7 +19,7 @@ class DataBaseModule {
 
     @Provides
     @Singleton
-    fun provideWeatherDatabase(@ApplicationContext context: Context) : WeatherDatabase =
+    fun provideWeatherDatabase(@ApplicationContext context: Context): WeatherDatabase =
         Room.databaseBuilder(
             context,
             WeatherDatabase::class.java,

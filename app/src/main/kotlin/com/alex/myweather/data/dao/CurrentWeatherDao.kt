@@ -11,7 +11,7 @@ import java.util.UUID
 interface CurrentWeatherDao {
 
     @Query("SELECT * FROM current_weather")
-    fun observeCurrentWeatherData() : Flow<CurrentWeatherEntity>
+    fun observeCurrentWeatherData() : Flow<List<CurrentWeatherEntity>>
 
     @Upsert
     suspend fun upsertCurrentWeatherData(value : CurrentWeatherEntity)
