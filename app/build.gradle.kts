@@ -85,6 +85,9 @@ dependencies {
     // Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
 
+    // Accompanist
+    implementation("com.google.accompanist:accompanist-permissions:0.32.0")
+
     // retrofit2
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
 

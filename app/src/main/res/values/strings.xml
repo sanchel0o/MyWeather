@@ -11,4 +11,8 @@
     <string name="channel_name">Weather Notification Channel</string>
     <string name="channel_description">Notification Channel</string>
 
+    <string name="service_not_avalible">Сервис недоступен!</string>
+    <string name="foreground_service_explanation">Фоновый сервис необходим для работы приложения. Пожалуйста, предоставьте разрешение</string>
+    <string name="give_permission">Предоставить разрешение</string>
+
 </resources>
