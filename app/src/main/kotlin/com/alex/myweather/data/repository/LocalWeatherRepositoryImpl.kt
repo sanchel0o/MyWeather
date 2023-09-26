@@ -12,7 +12,6 @@ import com.alex.myweather.domain.repository.LocalWeatherRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
-import java.util.UUID
 import javax.inject.Inject
 
 class LocalWeatherRepositoryImpl @Inject constructor(

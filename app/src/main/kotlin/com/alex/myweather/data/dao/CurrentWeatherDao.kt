@@ -5,7 +5,6 @@ import androidx.room.Query
 import androidx.room.Upsert
 import com.alex.myweather.data.model.entity.CurrentWeatherEntity
 import kotlinx.coroutines.flow.Flow
-import java.util.UUID
 
 @Dao
 interface CurrentWeatherDao {

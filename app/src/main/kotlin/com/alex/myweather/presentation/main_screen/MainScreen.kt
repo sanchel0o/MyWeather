@@ -28,7 +28,6 @@ import com.alex.myweather.presentation.main_screen.components.MainScreenTopAppBa
 import com.alex.myweather.presentation.main_screen.components.SingleDayForecast
 import com.alex.myweather.presentation.main_screen.components.WeatherInfoCard
 import com.alex.myweather.presentation.main_screen.components.dayOfMonth
-import java.time.LocalDate
 
 @Composable
 fun MainScreen(

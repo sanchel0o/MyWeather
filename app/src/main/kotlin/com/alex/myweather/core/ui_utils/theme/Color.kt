@@ -1,9 +1,6 @@
 package com.alex.myweather.core.ui_utils.theme
 
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TileMode
 
 //Color scheme created via material3 theme builder
 
