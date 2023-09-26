@@ -23,6 +23,8 @@ import javax.inject.Inject
 
 private const val WEATHER_CHANNEL = "WEATHER_CHANNEL"
 private const val NOTIFICATION_ID = 1
+private const val CITY = "Penza"
+private const val DAYS_QUANTITY = 5
 
 @AndroidEntryPoint
 class WeatherService @Inject constructor() : Service() {
@@ -37,7 +39,7 @@ class WeatherService @Inject constructor() : Service() {
         serviceScope.launch {
             while (true){
                 val result = try {
-                    remoteRepository.loadForecastData()
+                    remoteRepository.loadForecastData(city = CITY, days = DAYS_QUANTITY)
                 } catch (e: Exception) {
                     Log.d("SERVICE", "Exception message is: ${e.message}")
                     null

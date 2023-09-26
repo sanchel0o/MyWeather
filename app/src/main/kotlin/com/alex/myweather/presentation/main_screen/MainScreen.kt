@@ -27,6 +27,7 @@ import com.alex.myweather.presentation.main_screen.components.HourlyWeatherCard
 import com.alex.myweather.presentation.main_screen.components.MainScreenTopAppBar
 import com.alex.myweather.presentation.main_screen.components.SingleDayForecast
 import com.alex.myweather.presentation.main_screen.components.WeatherInfoCard
+import com.alex.myweather.presentation.main_screen.components.dayOfMonth
 import java.time.LocalDate
 
 @Composable
@@ -45,13 +46,13 @@ fun MainScreen(
 
         topBar = {
             MainScreenTopAppBar(
-                onMenuButtonClick = {},
-                onAddCityButtonClick = {}
+                onMenuButtonClick = {  },
+                onAddCityButtonClick =  {  }
             )
         }
     ) { paddingValues ->
         Box(
-            Modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
         ) {
@@ -63,7 +64,8 @@ fun MainScreen(
                     imageUrl = currentWeatherState?.imageUrl ?: "",
                     currentTemperature = currentWeatherState?.temperature,
                     unit = stringResource(id = R.string.degree_symbol),
-                    date = LocalDate.now()
+                    currentCondition = currentWeatherState?.condition,
+                    date = dayOfMonth
                 )
 
                 WeatherInfoCard(

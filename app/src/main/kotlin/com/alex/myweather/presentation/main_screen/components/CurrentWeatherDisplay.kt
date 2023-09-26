@@ -23,6 +23,8 @@ import com.alex.myweather.core.ui_utils.theme.MEDIUM_PADDING
 import com.alex.myweather.core.ui_utils.theme.SMALL_PADDING
 import java.time.LocalDate
 
+val dayOfMonth = "${LocalDate.now().month} ${LocalDate.now().dayOfMonth}"
+
 @Composable
 @MyWeatherPreview
 private fun Preview() = MyWeatherPreview {
@@ -30,7 +32,8 @@ private fun Preview() = MyWeatherPreview {
         imageUrl = "https://i.dummyjson.com/data/products/1/1.jpg",
         unit = stringResource(id = R.string.degree_symbol),
         currentTemperature = 50,
-        date = LocalDate.now()
+        currentCondition = "Sunny",
+        date = dayOfMonth
     )
 }
 
@@ -39,7 +42,8 @@ fun CurrentWeatherData(
     imageUrl: String,
     unit: String,
     currentTemperature: Int?,
-    date: LocalDate
+    currentCondition: String?,
+    date: String
 ) {
 
     Column(
@@ -54,6 +58,8 @@ fun CurrentWeatherData(
         CurrentWeatherIcon(imageUrl = imageUrl)
 
         CurrentDate(date = date)
+
+        CurrentCondition(currentCondition = currentCondition)
 
         CurrentTemperature(
             currentTemperature = currentTemperature,
@@ -101,11 +107,32 @@ fun CurrentTemperature(
 }
 
 @Composable
+fun CurrentCondition(
+    currentCondition: String?,
+) {
+    val value by remember(currentCondition) {
+        derivedStateOf {
+            if(currentCondition != null) {
+                "$currentCondition"
+            } else {
+                ""
+            }
+        }
+    }
+
+    Text(
+        style = MaterialTheme.typography.labelMedium,
+        color = MaterialTheme.colorScheme.secondary,
+        text = value
+    )
+}
+
+@Composable
 fun CurrentDate(
-    date: LocalDate
+    date: String,
 ) {
     Text(
-        color = MaterialTheme.colorScheme.secondary,
-        text = date.toString()
+        color = MaterialTheme.colorScheme.tertiary,
+        text = date
     )
 }
