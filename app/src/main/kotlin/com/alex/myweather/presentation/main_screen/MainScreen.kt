@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -47,6 +48,7 @@ fun MainScreen(
     val dailyWeatherState by viewModel.dailyWeatherDataFlow.collectAsStateWithLifecycle()
     val hourlyWeatherState by viewModel.hourlyWeatherDataFlow.collectAsStateWithLifecycle()
     val mainScreenState by viewModel.mainScreenState.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsState()
 
     val context = LocalContext.current
     val intent = Intent(context as MainActivity, WeatherService::class.java)
@@ -80,7 +82,7 @@ fun MainScreen(
                     verticalArrangement = Arrangement.Top
                 ) {
                     CurrentWeatherData(
-                        imageUrl = currentWeatherState?.imageUrl ?: "",
+                        imageUrl = state.currentWeatherData?.imageUrl ?: "",
                         currentTemperature = currentWeatherState?.temperature,
                         unit = stringResource(id = R.string.degree_symbol),
                         currentCondition = currentWeatherState?.condition,
