@@ -23,8 +23,6 @@ import javax.inject.Inject
 
 private const val WEATHER_CHANNEL = "WEATHER_CHANNEL"
 private const val NOTIFICATION_ID = 1
-private const val CITY = "Penza"
-private const val DAYS_QUANTITY = 5
 
 @AndroidEntryPoint
 class WeatherService @Inject constructor() : Service() {
@@ -35,26 +33,6 @@ class WeatherService @Inject constructor() : Service() {
     private val serviceJob = Job()
     private val serviceScope = CoroutineScope(Dispatchers.IO + serviceJob)
 
-    private fun loadWeatherData() {
-        serviceScope.launch {
-            while (true){
-                val result = try {
-                    remoteRepository.loadForecastData(city = CITY, days = DAYS_QUANTITY)
-                } catch (e: Exception) {
-                    Log.d("SERVICE", "Exception message is: ${e.message}")
-                    null
-                }
-
-                localWeatherRepository.apply {
-                    result?.currentWeatherData?.let { saveCurrentWeatherData(it) }
-                    result?.dailyWeatherData?.map { saveDailyWeatherData(it) }
-                    result?.hourlyWeatherData?.map { saveHourlyWeatherData(it) }
-                }
-                delay(5000)
-            }
-        }
-    }
-
     override fun onCreate() {
         super.onCreate()
 
@@ -62,7 +40,6 @@ class WeatherService @Inject constructor() : Service() {
 
         val notificationBuilder = createNotificationBuilder()
         startForeground(NOTIFICATION_ID, notificationBuilder.build())
-        loadWeatherData()
     }
 
     private fun createNotificationBuilder(): NotificationCompat.Builder =

@@ -6,6 +6,7 @@ import com.alex.myweather.domain.model.HourlyWeatherData
 
 data class MainScreenState(
     val foregroundServicePermission: Boolean = false,
+    val isRefreshing: Boolean = false,
     val currentWeatherData: CurrentWeatherData? = null,
     val dailyWeatherData: List<DailyWeatherData> = emptyList(),
     val hourlyWeatherData: List<HourlyWeatherData> = emptyList(),

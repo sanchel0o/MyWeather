@@ -1,6 +1,5 @@
 package com.alex.myweather.presentation.main_screen
 
-import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
@@ -13,19 +12,20 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startForegroundService
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.alex.myweather.MainActivity
 import com.alex.myweather.R
 import com.alex.myweather.core.ui_utils.preview.MyWeatherPreview
 import com.alex.myweather.core.ui_utils.theme.MEDIUM_PADDING
@@ -37,8 +37,8 @@ import com.alex.myweather.presentation.main_screen.components.RequestPermissions
 import com.alex.myweather.presentation.main_screen.components.SingleDayForecast
 import com.alex.myweather.presentation.main_screen.components.WeatherInfoCard
 import com.alex.myweather.presentation.main_screen.components.dayOfMonth
-import com.alex.myweather.service.WeatherService
 
+@OptIn(ExperimentalMaterialApi::class)
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun MainScreen(
@@ -46,12 +46,12 @@ fun MainScreen(
 ) {
     val mainScreenState by viewModel.mainScreenState.collectAsStateWithLifecycle()
 
-    val context = LocalContext.current
-    val intent = Intent(context as MainActivity, WeatherService::class.java)
-
-    LaunchedEffect(key1 = mainScreenState.foregroundServicePermission) {
-        startForegroundService(context, intent)
-    }
+    val refreshState = rememberPullRefreshState(
+        refreshing = mainScreenState.isRefreshing,
+        onRefresh = {
+            viewModel.onEvent(MainScreenEvents.Refresh)
+        }
+    )
 
     RequestPermissions {
         viewModel.onEvent(MainScreenEvents.PermissionChanged)
@@ -59,8 +59,8 @@ fun MainScreen(
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding(),
-
+                .statusBarsPadding()
+                .pullRefresh(state = refreshState),
             topBar = {
                 MainScreenTopAppBar(
                     onMenuButtonClick = { },
@@ -68,61 +68,74 @@ fun MainScreen(
                 )
             }
         ) { paddingValues ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Top
+            Box {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    CurrentWeatherData(
-                        imageUrl = mainScreenState.currentWeatherData?.imageUrl ?: "",
-                        currentTemperature = mainScreenState.currentWeatherData?.temperature,
-                        unit = stringResource(id = R.string.degree_symbol),
-                        currentCondition = mainScreenState.currentWeatherData?.condition,
-                        date = dayOfMonth
-                    )
 
-                    WeatherInfoCard(
-                        pressure = mainScreenState.currentWeatherData?.pressure,
-                        humidity = mainScreenState.currentWeatherData?.humidity,
-                        windSpeed = mainScreenState.currentWeatherData?.windSpeed
-                    )
-
-                    LazyRow(
-                        modifier = Modifier
-                            .padding(horizontal = MEDIUM_PADDING.dp)
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(space = 12.dp),
-
-                        ) {
-                        items(mainScreenState.hourlyWeatherData) { item ->
-                            HourlyWeatherCard(
-                                time = item.time,
-                                temperature = item.temperature,
-                                unit = stringResource(id = R.string.degree_symbol),
-                                imageUrl = item.imageUrl
-                            )
-                        }
+                    item {
+                        CurrentWeatherData(
+                            imageUrl = mainScreenState.currentWeatherData?.imageUrl ?: "",
+                            currentTemperature = mainScreenState.currentWeatherData?.temperature,
+                            unit = stringResource(id = R.string.degree_symbol),
+                            currentCondition = mainScreenState.currentWeatherData?.condition,
+                            date = dayOfMonth
+                        )
                     }
 
-                    DailyForecastCard {
-                        LazyColumn {
-                            items(mainScreenState.dailyWeatherData) { item ->
-                                SingleDayForecast(
-                                    date = item.day,
-                                    dayHumidity = item.humidity,
-                                    imageUrl = item.imageUrl,
-                                    maxDayTemperature = item.maxTemp,
-                                    minDayTemperature = item.minTemp,
-                                    degreeUnit = stringResource(id = R.string.degree_symbol)
+                    item {
+                        WeatherInfoCard(
+                            pressure = mainScreenState.currentWeatherData?.pressure,
+                            humidity = mainScreenState.currentWeatherData?.humidity,
+                            windSpeed = mainScreenState.currentWeatherData?.windSpeed
+                        )
+                    }
+
+                    item {
+                        LazyRow(
+                            modifier = Modifier
+                                .padding(horizontal = MEDIUM_PADDING.dp)
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(space = 12.dp),
+
+                            ) {
+                            items(mainScreenState.hourlyWeatherData) { item ->
+                                HourlyWeatherCard(
+                                    time = item.time,
+                                    temperature = item.temperature,
+                                    unit = stringResource(id = R.string.degree_symbol),
+                                    imageUrl = item.imageUrl
                                 )
                             }
                         }
                     }
+
+                    item {
+                        DailyForecastCard {
+                            Column {
+                                mainScreenState.dailyWeatherData.forEach { item ->
+                                    SingleDayForecast(
+                                        date = item.day,
+                                        dayHumidity = item.humidity,
+                                        imageUrl = item.imageUrl,
+                                        maxDayTemperature = item.maxTemp,
+                                        minDayTemperature = item.minTemp,
+                                        degreeUnit = stringResource(id = R.string.degree_symbol)
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
+                PullRefreshIndicator(
+                    mainScreenState.isRefreshing,
+                    refreshState,
+                    Modifier.align(TopCenter)
+                )
             }
         }
     }
