@@ -40,7 +40,9 @@ class MainScreenViewModel @Inject constructor(
                 _mainScreenState.value = _mainScreenState.value.copy(
                     isRefreshing = true
                 )
+
                 loadWeatherData()
+
                 _mainScreenState.value = _mainScreenState.value.copy(
                     isRefreshing = false
                 )
