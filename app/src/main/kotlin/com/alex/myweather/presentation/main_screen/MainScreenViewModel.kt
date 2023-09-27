@@ -6,6 +6,7 @@ import com.alex.myweather.domain.model.CurrentWeatherData
 import com.alex.myweather.domain.model.DailyWeatherData
 import com.alex.myweather.domain.model.HourlyWeatherData
 import com.alex.myweather.domain.repository.LocalWeatherRepository
+import com.alex.myweather.presentation.main_screen.util.mutableStateIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -23,9 +24,6 @@ class MainScreenViewModel @Inject constructor(
     repository: LocalWeatherRepository
 ) : ViewModel() {
 
-    private val _mainScreenState = MutableStateFlow(MainScreenState())
-    val mainScreenState = _mainScreenState.asStateFlow()
-
     fun onEvent(event: MainScreenEvents) {
         when (event) {
             MainScreenEvents.PermissionChanged -> {
@@ -36,19 +34,7 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
-    fun loadData() {
-        viewModelScope.launch {
-
-            _mainScreenState.value = _mainScreenState.value.copy(
-                currentWeatherData = currentWeatherDataFlow.value,
-                dailyWeatherData = dailyWeatherDataFlow.value,
-                hourlyWeatherData = hourlyWeatherDataFlow.value
-            )
-
-        }
-    }
-
-    val currentWeatherDataFlow: StateFlow<CurrentWeatherData?> = repository
+    private val currentWeatherDataFlow: StateFlow<CurrentWeatherData?> = repository
         .observeCurrentWeatherData()
         .stateIn(
             scope = viewModelScope,
@@ -56,7 +42,7 @@ class MainScreenViewModel @Inject constructor(
             initialValue = null
         )
 
-    val dailyWeatherDataFlow: StateFlow<List<DailyWeatherData>> = repository
+    private val dailyWeatherDataFlow: StateFlow<List<DailyWeatherData>> = repository
         .observeDailyWeatherData()
         .stateIn(
             scope = viewModelScope,
@@ -64,7 +50,7 @@ class MainScreenViewModel @Inject constructor(
             initialValue = emptyList()
         )
 
-    val hourlyWeatherDataFlow: StateFlow<List<HourlyWeatherData>> = repository
+    private val hourlyWeatherDataFlow: StateFlow<List<HourlyWeatherData>> = repository
         .observeHourlyWeatherData()
         .stateIn(
             scope = viewModelScope,
@@ -72,8 +58,7 @@ class MainScreenViewModel @Inject constructor(
             initialValue = emptyList()
         )
 
-    private val _state: MutableStateFlow<MainScreenState> =
-        combine(
+    private val _mainScreenState: MutableStateFlow<MainScreenState> = combine(
             currentWeatherDataFlow,
             dailyWeatherDataFlow,
             hourlyWeatherDataFlow
@@ -87,18 +72,6 @@ class MainScreenViewModel @Inject constructor(
         }.mutableStateIn(
             scope = viewModelScope,
             initialValue = MainScreenState())
-    val state = _state.asStateFlow()
 
-    private fun <T> Flow<T>.mutableStateIn(
-        scope: CoroutineScope,
-        initialValue: T
-    ): MutableStateFlow<T> {
-        val flow = MutableStateFlow(initialValue)
-
-        scope.launch {
-            this@mutableStateIn.collect(flow)
-        }
-
-        return flow
-    }
+    val mainScreenState = _mainScreenState.asStateFlow()
 }

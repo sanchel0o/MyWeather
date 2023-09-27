@@ -44,11 +44,7 @@ import com.alex.myweather.service.WeatherService
 fun MainScreen(
     viewModel: MainScreenViewModel = hiltViewModel()
 ) {
-    val currentWeatherState by viewModel.currentWeatherDataFlow.collectAsStateWithLifecycle()
-    val dailyWeatherState by viewModel.dailyWeatherDataFlow.collectAsStateWithLifecycle()
-    val hourlyWeatherState by viewModel.hourlyWeatherDataFlow.collectAsStateWithLifecycle()
     val mainScreenState by viewModel.mainScreenState.collectAsStateWithLifecycle()
-    val state by viewModel.state.collectAsState()
 
     val context = LocalContext.current
     val intent = Intent(context as MainActivity, WeatherService::class.java)
@@ -82,17 +78,17 @@ fun MainScreen(
                     verticalArrangement = Arrangement.Top
                 ) {
                     CurrentWeatherData(
-                        imageUrl = state.currentWeatherData?.imageUrl ?: "",
-                        currentTemperature = currentWeatherState?.temperature,
+                        imageUrl = mainScreenState.currentWeatherData?.imageUrl ?: "",
+                        currentTemperature = mainScreenState.currentWeatherData?.temperature,
                         unit = stringResource(id = R.string.degree_symbol),
-                        currentCondition = currentWeatherState?.condition,
+                        currentCondition = mainScreenState.currentWeatherData?.condition,
                         date = dayOfMonth
                     )
 
                     WeatherInfoCard(
-                        pressure = currentWeatherState?.pressure,
-                        humidity = currentWeatherState?.humidity,
-                        windSpeed = currentWeatherState?.windSpeed
+                        pressure = mainScreenState.currentWeatherData?.pressure,
+                        humidity = mainScreenState.currentWeatherData?.humidity,
+                        windSpeed = mainScreenState.currentWeatherData?.windSpeed
                     )
 
                     LazyRow(
@@ -102,7 +98,7 @@ fun MainScreen(
                         horizontalArrangement = Arrangement.spacedBy(space = 12.dp),
 
                         ) {
-                        items(hourlyWeatherState) { item ->
+                        items(mainScreenState.hourlyWeatherData) { item ->
                             HourlyWeatherCard(
                                 time = item.time,
                                 temperature = item.temperature,
@@ -114,7 +110,7 @@ fun MainScreen(
 
                     DailyForecastCard {
                         LazyColumn {
-                            items(dailyWeatherState) { item ->
+                            items(mainScreenState.dailyWeatherData) { item ->
                                 SingleDayForecast(
                                     date = item.day,
                                     dayHumidity = item.humidity,
