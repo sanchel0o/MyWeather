@@ -1,4 +1,4 @@
-package com.alex.myweather.presentation.main_screen.util
+package com.alex.myweather.core.coroutine_utils
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -16,4 +16,3 @@ fun <T> Flow<T>.mutableStateIn(
     }
     return flow
 }
-

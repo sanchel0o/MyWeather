@@ -1,9 +1,9 @@
-package com.alex.myweather.presentation.main_screen.components
+package com.alex.myweather.presentation.main_screen.composable
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,15 +20,15 @@ import com.alex.myweather.core.ui_utils.theme.SMALL_PADDING
 private fun Preview() = MyWeatherPreview {
     MainScreenTopAppBar(
         onMenuButtonClick = {},
-        onAddCityButtonClick = {}
+        onUpdateButtonClick = {}
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreenTopAppBar(
-    onMenuButtonClick: () -> Unit,
-    onAddCityButtonClick: () -> Unit
+    onMenuButtonClick: () -> Unit = {},
+    onUpdateButtonClick: () -> Unit = {}
 ) {
     TopAppBar(
         navigationIcon = {
@@ -36,7 +36,7 @@ fun MainScreenTopAppBar(
         },
         title = { },
         actions = {
-            AddCityButton(onClick = onAddCityButtonClick)
+            UpdateButton(onClick = onUpdateButtonClick)
         }
     )
 }
@@ -58,7 +58,7 @@ fun MenuButton(
 }
 
 @Composable
-fun AddCityButton(
+fun UpdateButton(
     onClick: () -> Unit
 ) {
     IconButton(
@@ -66,7 +66,7 @@ fun AddCityButton(
         onClick = { onClick() },
     ) {
         Icon(
-            imageVector = Icons.Outlined.Add,
+            imageVector = Icons.Outlined.Refresh,
             tint = MaterialTheme.colorScheme.secondary,
             contentDescription = null
         )

@@ -1,55 +1,40 @@
 package com.alex.myweather.presentation.main_screen
 
 import android.os.Build
-import android.view.LayoutInflater
 import androidx.annotation.RequiresApi
-import androidx.cardview.widget.CardView
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Surface
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.pullRefreshIndicatorTransform
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.alex.myweather.R
 import com.alex.myweather.core.ui_utils.preview.MyWeatherPreview
 import com.alex.myweather.core.ui_utils.theme.MEDIUM_PADDING
-import com.alex.myweather.presentation.main_screen.components.CurrentWeatherData
-import com.alex.myweather.presentation.main_screen.components.DailyForecastAdapter
-import com.alex.myweather.presentation.main_screen.components.DailyForecastView
-import com.alex.myweather.presentation.main_screen.components.HourlyWeatherCard
-import com.alex.myweather.presentation.main_screen.components.MainScreenTopAppBar
-import com.alex.myweather.presentation.main_screen.components.RequestPermissions
-import com.alex.myweather.presentation.main_screen.components.WeatherInfoCard
-import com.alex.myweather.presentation.main_screen.components.dayOfMonth
+import com.alex.myweather.presentation.main_screen.composable.CurrentWeatherData
+import com.alex.myweather.presentation.main_screen.composable.HourlyWeatherCard
+import com.alex.myweather.presentation.main_screen.composable.MainScreenTopAppBar
+import com.alex.myweather.presentation.main_screen.composable.RequestPermissions
+import com.alex.myweather.presentation.main_screen.composable.WeatherInfoCard
+import com.alex.myweather.presentation.main_screen.composable.dayOfMonth
+import com.alex.myweather.presentation.main_screen.xml.DailyForecastView
 
 @OptIn(ExperimentalMaterialApi::class)
 @RequiresApi(Build.VERSION_CODES.P)
@@ -65,7 +50,6 @@ fun MainScreen(
             viewModel.onEvent(MainScreenEvents.Refresh)
         }
     )
-    val rotation = animateFloatAsState(refreshState.progress * 120, label = "")
 
     RequestPermissions {
         viewModel.onEvent(MainScreenEvents.PermissionChanged)
@@ -77,8 +61,7 @@ fun MainScreen(
                 .pullRefresh(state = refreshState),
             topBar = {
                 MainScreenTopAppBar(
-                    onMenuButtonClick = { },
-                    onAddCityButtonClick = { }
+                    onUpdateButtonClick = { viewModel.onEvent(MainScreenEvents.Refresh) }
                 )
             }
         ) { paddingValues ->
@@ -150,27 +133,18 @@ fun MainScreen(
 //                        }
 //                    }
                 }
-                Surface(
+
+                PullRefreshIndicator(
                     modifier = Modifier
-                        .size(40.dp)
-                        .align(TopCenter)
-                        .pullRefreshIndicatorTransform(refreshState)
-                        .rotate(rotation.value),
-                    color = MaterialTheme.colorScheme.tertiary,
-                    shape = CircleShape,
-                    elevation = if (refreshState.progress > 0 || mainScreenState.isRefreshing) 20.dp else 0.dp,
-                ) {
-                    Icon(
-                        tint = MaterialTheme.colorScheme.onTertiary,
-                        imageVector = Icons.Filled.Refresh,
-                        contentDescription = null
-                    )
-                }
+                        .padding(paddingValues)
+                        .align(TopCenter),
+                    refreshing = mainScreenState.isRefreshing,
+                    state = refreshState
+                )
             }
         }
     }
 }
-
 
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable

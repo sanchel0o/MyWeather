@@ -1,7 +1,6 @@
-package com.alex.myweather.presentation.main_screen.components
+package com.alex.myweather.presentation.main_screen.xml
 
 import android.view.LayoutInflater
-import androidx.cardview.widget.CardView
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,16 +17,22 @@ fun DailyForecastView(
     AndroidView(
         modifier = Modifier.fillMaxWidth(),
         factory = { context ->
-            LayoutInflater.from(context)
-                .inflate(R.layout.card_view, null) as CardView
+            val recyclerView = LayoutInflater
+                .from(context)
+                .inflate(R.layout.recycler_view, null) as RecyclerView
+
+            recyclerView.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = DailyForecastAdapter(data)
+            }
+
+            recyclerView
         },
         update = { view ->
-            val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
-            val data = data
-            val adapter = DailyForecastAdapter(data)
-
-            recyclerView.layoutManager = LinearLayoutManager(view.context)
-            recyclerView.adapter = adapter
+            (view.adapter as? DailyForecastAdapter)?.update(data)
+        },
+        onReset = {view ->
+            (view.adapter as? DailyForecastAdapter)?.clear()
         }
     )
 }

@@ -1,4 +1,4 @@
-package com.alex.myweather.presentation.main_screen.components
+package com.alex.myweather.presentation.main_screen.composable
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -146,4 +146,3 @@ fun SingleDayForecast(
         }
     }
 }
-

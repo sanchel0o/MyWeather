@@ -1,4 +1,4 @@
-package com.alex.myweather.presentation.main_screen.components
+package com.alex.myweather.presentation.main_screen.composable
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -40,7 +40,6 @@ private fun Preview() = MyWeatherPreview {
         onClick = { }
     )
 }
-
 
 @RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalPermissionsApi::class)

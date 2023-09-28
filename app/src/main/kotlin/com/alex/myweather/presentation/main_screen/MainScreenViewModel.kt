@@ -3,19 +3,13 @@ package com.alex.myweather.presentation.main_screen
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alex.myweather.domain.model.CurrentWeatherData
-import com.alex.myweather.domain.model.DailyWeatherData
-import com.alex.myweather.domain.model.HourlyWeatherData
+import com.alex.myweather.core.coroutine_utils.mutableStateIn
 import com.alex.myweather.domain.repository.LocalWeatherRepository
 import com.alex.myweather.domain.repository.RemoteWeatherRepository
-import com.alex.myweather.presentation.main_screen.util.mutableStateIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,73 +22,10 @@ class MainScreenViewModel @Inject constructor(
     private val localRepository: LocalWeatherRepository,
 ) : ViewModel() {
 
-    fun onEvent(event: MainScreenEvents) {
-        when (event) {
-            MainScreenEvents.PermissionChanged -> {
-                _mainScreenState.value = _mainScreenState.value.copy(
-                    foregroundServicePermission = true
-                )
-            }
-
-            MainScreenEvents.Refresh -> {
-                _mainScreenState.value = _mainScreenState.value.copy(
-                    isRefreshing = true
-                )
-
-                loadWeatherData()
-
-                _mainScreenState.value = _mainScreenState.value.copy(
-                    isRefreshing = false
-                )
-            }
-        }
-    }
-
-    private fun loadWeatherData() {
-        viewModelScope.launch {
-            val result = try {
-                remoteRepository.loadForecastData(city = CITY, days = DAYS_QUANTITY)
-            } catch (e: Exception) {
-                Log.d("VM", "Exception message is: ${e.message}")
-                null
-            }
-
-            localRepository.apply {
-                result?.currentWeatherData?.let { saveCurrentWeatherData(it) }
-                result?.dailyWeatherData?.map { saveDailyWeatherData(it) }
-                result?.hourlyWeatherData?.map { saveHourlyWeatherData(it) }
-            }
-        }
-    }
-
-    private val currentWeatherDataFlow: StateFlow<CurrentWeatherData?> = localRepository
-        .observeCurrentWeatherData()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Lazily,
-            initialValue = null
-        )
-
-    private val dailyWeatherDataFlow: StateFlow<List<DailyWeatherData>> = localRepository
-        .observeDailyWeatherData()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Eagerly,
-            initialValue = emptyList()
-        )
-
-    private val hourlyWeatherDataFlow: StateFlow<List<HourlyWeatherData>> = localRepository
-        .observeHourlyWeatherData()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Eagerly,
-            initialValue = emptyList()
-        )
-
     private val _mainScreenState: MutableStateFlow<MainScreenState> = combine(
-        currentWeatherDataFlow,
-        dailyWeatherDataFlow,
-        hourlyWeatherDataFlow
+        localRepository.observeCurrentWeatherData(),
+        localRepository.observeDailyWeatherData(),
+        localRepository.observeHourlyWeatherData(),
     ) { currentWeatherData, dailyWeatherData, hourlyWeatherData ->
         MainScreenState(
             foregroundServicePermission = true,
@@ -109,7 +40,47 @@ class MainScreenViewModel @Inject constructor(
 
     val mainScreenState = _mainScreenState.asStateFlow()
 
+    fun onEvent(event: MainScreenEvents) {
+        when (event) {
+            MainScreenEvents.PermissionChanged -> {
+                _mainScreenState.value = _mainScreenState.value.copy(
+                    foregroundServicePermission = true
+                )
+            }
+
+            MainScreenEvents.Refresh -> {
+                viewModelScope.launch {
+                    _mainScreenState.value = _mainScreenState.value.copy(
+                        isRefreshing = true
+                    )
+
+                    loadWeatherData()
+
+                    _mainScreenState.value = _mainScreenState.value.copy(
+                        isRefreshing = false
+                    )
+                }
+            }
+        }
+    }
+
+    private suspend fun loadWeatherData() {
+        val result = try {
+            remoteRepository.loadForecastData(city = CITY, days = DAYS_QUANTITY)
+        } catch (e: Exception) {
+            Log.d("VM", "Exception message is: ${e.message}")
+            null
+        }
+        localRepository.apply {
+            result?.currentWeatherData?.let { saveCurrentWeatherData(it) }
+            result?.dailyWeatherData?.map { saveDailyWeatherData(it) }
+            result?.hourlyWeatherData?.map { saveHourlyWeatherData(it) }
+        }
+    }
+
     init {
-        loadWeatherData()
+        viewModelScope.launch {
+            loadWeatherData()
+        }
     }
 }
