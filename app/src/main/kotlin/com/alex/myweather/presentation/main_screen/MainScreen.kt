@@ -42,9 +42,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alex.myweather.R
 import com.alex.myweather.core.ui_utils.preview.MyWeatherPreview
 import com.alex.myweather.core.ui_utils.theme.MEDIUM_PADDING
-import com.alex.myweather.core.ui_utils.theme.SMALL_PADDING
 import com.alex.myweather.presentation.main_screen.components.CurrentWeatherData
 import com.alex.myweather.presentation.main_screen.components.DailyForecastAdapter
+import com.alex.myweather.presentation.main_screen.components.DailyForecastView
 import com.alex.myweather.presentation.main_screen.components.HourlyWeatherCard
 import com.alex.myweather.presentation.main_screen.components.MainScreenTopAppBar
 import com.alex.myweather.presentation.main_screen.components.RequestPermissions
@@ -128,23 +128,11 @@ fun MainScreen(
                         }
                     }
 
+                    // XML-layout item
                     item {
-                        AndroidView(
-                            modifier = Modifier.fillMaxWidth(),
-                            factory = { context ->
-                                LayoutInflater.from(context)
-                                    .inflate(R.layout.card_view, null) as CardView
-                            },
-                            update = { view ->
-                                val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
-                                val data = mainScreenState.dailyWeatherData
-                                val adapter = DailyForecastAdapter(data)
-                                recyclerView.adapter
-                                recyclerView.layoutManager = LinearLayoutManager(view.context)
-                                recyclerView.adapter = adapter
-                            }
-                        )
+                        DailyForecastView(data = mainScreenState.dailyWeatherData)
                     }
+
 //                    item {
 //                        DailyForecastCard {
 //                            Column {
