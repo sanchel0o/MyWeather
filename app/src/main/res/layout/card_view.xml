@@ -7,6 +7,7 @@
     app:cardCornerRadius="24dp"
     app:contentPadding="16dp">
 
+    <include layout="@layout/recycler_view_layout"/>
 
 
 </androidx.cardview.widget.CardView>

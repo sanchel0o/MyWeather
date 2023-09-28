@@ -3,6 +3,7 @@ package com.alex.myweather.presentation.main_screen
 import android.os.Build
 import android.view.LayoutInflater
 import androidx.annotation.RequiresApi
+import androidx.cardview.widget.CardView
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -129,22 +130,18 @@ fun MainScreen(
 
                     item {
                         AndroidView(
-                            modifier = Modifier.padding(SMALL_PADDING.dp),
+                            modifier = Modifier.fillMaxWidth(),
                             factory = { context ->
                                 LayoutInflater.from(context)
-                                    .inflate(R.layout.recycler_view_layout, null) as RecyclerView
+                                    .inflate(R.layout.card_view, null) as CardView
                             },
                             update = { view ->
-                                // Update the RecyclerView with your data and adapter
-                                val dataList = mainScreenState.dailyWeatherData// Your data list
-                                val adapter =
-                                    DailyForecastAdapter(dataList)// Your RecyclerView adapter
-
-                                view.adapter
-
-                                view.layoutManager = LinearLayoutManager(view.context)
-                                view.adapter = adapter
-                                //adapter.submitList(dataList)
+                                val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
+                                val data = mainScreenState.dailyWeatherData
+                                val adapter = DailyForecastAdapter(data)
+                                recyclerView.adapter
+                                recyclerView.layoutManager = LinearLayoutManager(view.context)
+                                recyclerView.adapter = adapter
                             }
                         )
                     }
@@ -163,7 +160,6 @@ fun MainScreen(
 //                                }
 //                            }
 //                        }
-//                  }
 //                    }
                 }
                 Surface(
