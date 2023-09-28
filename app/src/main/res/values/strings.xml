@@ -14,5 +14,8 @@
     <string name="service_not_avalible">Сервис недоступен!</string>
     <string name="foreground_service_explanation">Фоновый сервис необходим для работы приложения. Пожалуйста, предоставьте разрешение</string>
     <string name="give_permission">Предоставить разрешение</string>
+    <string name="humidity">Humidity</string>
+    <string name="current_weather">Current Weather</string>
+    <string name="title">Title</string>
 
 </resources>

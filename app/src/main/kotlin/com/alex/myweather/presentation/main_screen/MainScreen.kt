@@ -1,11 +1,11 @@
 package com.alex.myweather.presentation.main_screen
 
 import android.os.Build
+import android.view.LayoutInflater
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -33,17 +33,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.alex.myweather.R
 import com.alex.myweather.core.ui_utils.preview.MyWeatherPreview
 import com.alex.myweather.core.ui_utils.theme.MEDIUM_PADDING
+import com.alex.myweather.core.ui_utils.theme.SMALL_PADDING
 import com.alex.myweather.presentation.main_screen.components.CurrentWeatherData
-import com.alex.myweather.presentation.main_screen.components.DailyForecastCard
+import com.alex.myweather.presentation.main_screen.components.DailyForecastAdapter
 import com.alex.myweather.presentation.main_screen.components.HourlyWeatherCard
 import com.alex.myweather.presentation.main_screen.components.MainScreenTopAppBar
 import com.alex.myweather.presentation.main_screen.components.RequestPermissions
-import com.alex.myweather.presentation.main_screen.components.SingleDayForecast
 import com.alex.myweather.presentation.main_screen.components.WeatherInfoCard
 import com.alex.myweather.presentation.main_screen.components.dayOfMonth
 
@@ -125,21 +128,43 @@ fun MainScreen(
                     }
 
                     item {
-                        DailyForecastCard {
-                            Column {
-                                mainScreenState.dailyWeatherData.forEach { item ->
-                                    SingleDayForecast(
-                                        date = item.day,
-                                        dayHumidity = item.humidity,
-                                        imageUrl = item.imageUrl,
-                                        maxDayTemperature = item.maxTemp,
-                                        minDayTemperature = item.minTemp,
-                                        degreeUnit = stringResource(id = R.string.degree_symbol)
-                                    )
-                                }
+                        AndroidView(
+                            modifier = Modifier.padding(SMALL_PADDING.dp),
+                            factory = { context ->
+                                LayoutInflater.from(context)
+                                    .inflate(R.layout.recycler_view_layout, null) as RecyclerView
+                            },
+                            update = { view ->
+                                // Update the RecyclerView with your data and adapter
+                                val dataList = mainScreenState.dailyWeatherData// Your data list
+                                val adapter =
+                                    DailyForecastAdapter(dataList)// Your RecyclerView adapter
+
+                                view.adapter
+
+                                view.layoutManager = LinearLayoutManager(view.context)
+                                view.adapter = adapter
+                                //adapter.submitList(dataList)
                             }
-                        }
+                        )
                     }
+//                    item {
+//                        DailyForecastCard {
+//                            Column {
+//                                mainScreenState.dailyWeatherData.forEach { item ->
+//                                    SingleDayForecast(
+//                                        date = item.day,
+//                                        dayHumidity = item.humidity,
+//                                        imageUrl = item.imageUrl,
+//                                        maxDayTemperature = item.maxTemp,
+//                                        minDayTemperature = item.minTemp,
+//                                        degreeUnit = stringResource(id = R.string.degree_symbol)
+//                                    )
+//                                }
+//                            }
+//                        }
+//                  }
+//                    }
                 }
                 Surface(
                     modifier = Modifier
@@ -154,12 +179,14 @@ fun MainScreen(
                     Icon(
                         tint = MaterialTheme.colorScheme.onTertiary,
                         imageVector = Icons.Filled.Refresh,
-                        contentDescription = null)
+                        contentDescription = null
+                    )
                 }
             }
         }
     }
 }
+
 
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable

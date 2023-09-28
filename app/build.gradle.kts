@@ -12,6 +12,7 @@ android {
 
     buildFeatures{
         buildConfig = true
+        viewBinding = true
     }
 
     defaultConfig {
@@ -70,6 +71,10 @@ android {
 }
 
 dependencies {
+    // XML
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.cardview:cardview:1.0.0")
+    implementation("androidx.recyclerview:recyclerview:1.3.1")
 
     // Compose
     implementation(platform("androidx.compose:compose-bom:2023.09.00"))
@@ -78,13 +83,14 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.material:material:1.5.1")
+    implementation("androidx.compose.material:material:1.5.2")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation ("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
 
     // Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("io.coil-kt:coil:2.4.0")
 
     // Accompanist
     implementation("com.google.accompanist:accompanist-permissions:0.32.0")
